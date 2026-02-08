@@ -38,7 +38,7 @@
     "dev:webui": "cd src/webui && pnpm run dev",
     "watch": "vite build --watch",
     "dev": "vite build --watch",
-    "deploy": "vite build",
+    "push": "vite build",
     "typecheck": "tsc --noEmit"
   }
 }

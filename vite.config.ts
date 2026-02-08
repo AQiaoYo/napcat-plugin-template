@@ -53,14 +53,14 @@ function copyAssetsPlugin() {
                 const webuiDest = resolve(distDir, 'webui');
                 if (fs.existsSync(webuiDist)) {
                     copyDirRecursive(webuiDist, webuiDest);
-                    console.log('[copy-assets] ✅ 已复制 webui 构建产物');
+                    console.log('[copy-assets] (o\'v\'o) 已复制 webui 构建产物');
                 } else {
                     // 回退：复制 webui 源文件中的 index.html（开发模式）
                     const webuiSrc = resolve(__dirname, 'src/webui/index.html');
                     if (fs.existsSync(webuiSrc)) {
                         if (!fs.existsSync(webuiDest)) fs.mkdirSync(webuiDest, { recursive: true });
                         fs.copyFileSync(webuiSrc, resolve(webuiDest, 'index.html'));
-                        console.log('[copy-assets] ⚠️ webui 未构建，已复制源 index.html');
+                        console.log('[copy-assets] (\'o\') webui 未构建，已复制源 index.html');
                     }
                 }
 
@@ -82,19 +82,19 @@ function copyAssetsPlugin() {
                         resolve(distDir, 'package.json'),
                         JSON.stringify(distPkg, null, 2)
                     );
-                    console.log('[copy-assets] ✅ 已生成精简 package.json');
+                    console.log('[copy-assets] (o\'v\'o) 已生成精简 package.json');
                 }
 
                 // 3. 复制 templates 目录（如果存在）
                 const templatesSrc = resolve(__dirname, 'templates');
                 if (fs.existsSync(templatesSrc)) {
                     copyDirRecursive(templatesSrc, resolve(distDir, 'templates'));
-                    console.log('[copy-assets] ✅ 已复制 templates 目录');
+                    console.log('[copy-assets] (o\'v\'o) 已复制 templates 目录');
                 }
 
-                console.log('[copy-assets] 🎉 资源复制完成！');
+                console.log('[copy-assets] (*\'v\'*) 资源复制完成！');
             } catch (error) {
-                console.error('[copy-assets] ❌ 资源复制失败:', error);
+                console.error('[copy-assets] (;_;) 资源复制失败:', error);
             }
         },
     };
