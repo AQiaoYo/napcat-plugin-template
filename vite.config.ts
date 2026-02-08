@@ -68,7 +68,7 @@ function copyAssetsPlugin() {
                 const pkgPath = resolve(__dirname, 'package.json');
                 if (fs.existsSync(pkgPath)) {
                     const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf-8'));
-                    const distPkg = {
+                    const distPkg: Record<string, unknown> = {
                         name: pkg.name,
                         plugin: pkg.plugin,
                         version: pkg.version,
@@ -78,6 +78,9 @@ function copyAssetsPlugin() {
                         author: pkg.author,
                         dependencies: pkg.dependencies,
                     };
+                    if (pkg.napcat) {
+                        distPkg.napcat = pkg.napcat;
+                    }
                     fs.writeFileSync(
                         resolve(distDir, 'package.json'),
                         JSON.stringify(distPkg, null, 2)
@@ -123,8 +126,6 @@ export default defineConfig({
     },
     plugins: [nodeResolve(), copyAssetsPlugin(), napcatHmrPlugin({
         webui: {
-            root: './src/webui',
-            buildCommand: 'pnpm install && pnpm run build',
             distDir: './src/webui/dist',
             targetDir: 'webui',
         },
