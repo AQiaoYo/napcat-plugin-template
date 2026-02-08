@@ -22,8 +22,8 @@ importers:
         specifier: ^20.19.33
         version: 20.19.33
       napcat-plugin-debug-cli:
-        specifier: ^1.2.5
-        version: 1.2.5(vite@6.4.1(@types/node@20.19.33))(ws@8.19.0)
+        specifier: ^1.2.6
+        version: 1.2.6(vite@6.4.1(@types/node@20.19.33))(ws@8.19.0)
       typescript:
         specifier: ^5.9.3
         version: 5.9.3
@@ -422,8 +422,8 @@ packages:
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
-  napcat-plugin-debug-cli@1.2.5:
-    resolution: {integrity: sha512-/jJszJDLdIJKY2Ps+tm4WmkpEYW2e/SFI9QK359KqPnf8eSojudh5O9n+B4+LIC+2omIMpAV2TbzdVM2iydFxQ==}
+  napcat-plugin-debug-cli@1.2.6:
+    resolution: {integrity: sha512-zR9MhJyfaCe/ZeraJeeOdARCtcKClD2ercwGGofIg7Ozj/1ACFx8af/WUC2SJFfItMuS6qtp+rfjbdSzgiHwow==}
     hasBin: true
     peerDependencies:
       vite: '>=5.0.0'
@@ -809,7 +809,7 @@ snapshots:
 
   nanoid@3.3.11: {}
 
-  napcat-plugin-debug-cli@1.2.5(vite@6.4.1(@types/node@20.19.33))(ws@8.19.0):
+  napcat-plugin-debug-cli@1.2.6(vite@6.4.1(@types/node@20.19.33))(ws@8.19.0):
     dependencies:
       ws: 8.19.0
     optionalDependencies:
