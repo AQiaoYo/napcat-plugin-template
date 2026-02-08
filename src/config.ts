@@ -1,9 +1,9 @@
 /**
  * 插件配置模块
- * 定义默认配置和 WebUI 配置 Schema
+ * 定义默认配置值和 WebUI 配置 Schema
  */
 
-import type { NapCatPluginContext } from 'napcat-types/napcat-onebot/network/plugin/types';
+import type { NapCatPluginContext, PluginConfigSchema } from 'napcat-types/napcat-onebot/network/plugin/types';
 import type { PluginConfig } from './types';
 
 /** 默认配置 */
@@ -17,19 +17,20 @@ export const DEFAULT_CONFIG: PluginConfig = {
 };
 
 /**
- * 初始化 WebUI 配置 Schema
- * 使用 NapCat 提供的构建器生成配置界面
- * 
- * 可用的 UI 组件：
- * - ctx.NapCatConfig.boolean(key, label, defaultValue?, description?, reactive?) - 开关
- * - ctx.NapCatConfig.text(key, label, defaultValue?, description?, reactive?) - 文本输入
- * - ctx.NapCatConfig.number(key, label, defaultValue?, description?, reactive?) - 数字输入
- * - ctx.NapCatConfig.select(key, label, options, defaultValue?, description?, reactive?) - 下拉选择
- * - ctx.NapCatConfig.html(htmlString) - 自定义 HTML
- * - ctx.NapCatConfig.combine(...schemas) - 组合多个配置项
+ * 构建 WebUI 配置 Schema
+ *
+ * 使用 ctx.NapCatConfig 提供的构建器方法生成配置界面：
+ *   - boolean(key, label, defaultValue?, description?, reactive?)  → 开关
+ *   - text(key, label, defaultValue?, description?, reactive?)     → 文本输入
+ *   - number(key, label, defaultValue?, description?, reactive?)   → 数字输入
+ *   - select(key, label, options, defaultValue?, description?)     → 下拉单选
+ *   - multiSelect(key, label, options, defaultValue?, description?) → 下拉多选
+ *   - html(content)     → 自定义 HTML 展示（不保存值）
+ *   - plainText(content) → 纯文本说明
+ *   - combine(...items)  → 组合多个配置项为 Schema
  */
-export function initConfigUI(ctx: NapCatPluginContext) {
-    const schema = ctx.NapCatConfig.combine(
+export function buildConfigSchema(ctx: NapCatPluginContext): PluginConfigSchema {
+    return ctx.NapCatConfig.combine(
         // 插件信息头部
         ctx.NapCatConfig.html(`
             <div style="padding: 16px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; margin-bottom: 20px; color: white;">
@@ -47,16 +48,4 @@ export function initConfigUI(ctx: NapCatPluginContext) {
         ctx.NapCatConfig.number('cooldownSeconds', '冷却时间（秒）', 60, '同一命令请求冷却时间，0 表示不限制')
         // TODO: 在这里添加你的配置项
     );
-
-    return schema;
-}
-
-/**
- * 获取默认配置的副本
- */
-export function getDefaultConfig(): PluginConfig {
-    return {
-        ...DEFAULT_CONFIG,
-        groupConfigs: {},
-    };
 }
