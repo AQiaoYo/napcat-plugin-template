@@ -88,13 +88,13 @@ pnpm install
 ### 4. 构建 & 开发
 
 ```bash
-# 完整构建（前端 + 后端 + 资源复制，一步完成）
+# 完整构建（自动构建 WebUI 前端 + 后端 + 资源复制，一步完成）
 pnpm run build
 
-# 仅构建前端
+# 仅构建 WebUI 前端（不构建后端）
 pnpm run build:webui
 
-# 前端开发服务器（热更新，自动代理到 NapCat）
+# WebUI 前端开发服务器（实时预览，推荐纯前端开发时使用）
 pnpm run dev:webui
 
 # 类型检查
@@ -120,7 +120,7 @@ pnpm run dev
 >
 > 如果只开发 WebUI 前端，推荐使用 `pnpm run dev:webui` 启动前端开发服务器，可实时预览。
 
-`vite.config.ts` 中的 `napcatHmrPlugin()` 会在每次 `writeBundle` 时自动：连接调试服务 → 获取远程插件目录 → 复制 dist/ → 调用 reloadPlugin。
+`vite.config.ts` 中的 `copyAssetsPlugin` 会在每次构建时自动构建 WebUI 前端并复制产物，`napcatHmrPlugin()` 会自动连接调试服务 → 复制 dist/ 到远程 → 调用 reloadPlugin。
 
 如需自定义调试服务地址或 token：
 

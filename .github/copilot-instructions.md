@@ -167,11 +167,11 @@ pnpm install
 # 类型检查
 pnpm run typecheck
 
-# 完整构建（前端 + 后端 + 资源复制）
+# 完整构建（自动构建 WebUI 前端 + 后端 + 资源复制，一步完成）
 pnpm run build
 # 输出: dist/index.mjs + dist/package.json + dist/webui/
 
-# WebUI 前端开发服务器
+# WebUI 前端开发服务器（实时预览，推荐纯前端开发时使用）
 pnpm run dev:webui
 ```
 
@@ -194,33 +194,25 @@ pnpm run dev
 > `push` = `vite build`（构建完成时 Vite 插件自动部署+重载）  
 > `dev` = `vite build --watch`（每次重新构建后 Vite 插件自动部署+重载）
 
-### 配置说明
+### 构建流程说明
 
-`vite.config.ts` 中的 `napcatHmrPlugin()` 会在每次 `writeBundle` 时自动：连接调试服务 → 获取远程插件目录 → 复制 dist/ → 调用 reloadPlugin。
+每次执行 `pnpm run build`、`pnpm run deploy` 或 `pnpm run dev`（后端文件变化时），`vite.config.ts` 中的 `copyAssetsPlugin` 会在 `writeBundle` 阶段自动：
 
-#### WebUI 监控与自动部署
+1. 构建 WebUI 前端（在 `src/webui` 目录执行 `pnpm run build`）
+2. 复制 WebUI 构建产物到 `dist/webui/`
+3. 生成精简的 `dist/package.json`
+4. 复制 `templates/` 目录（如果存在）
 
-`napcatHmrPlugin` 支持 `webui` 配置项，可在每次主插件构建完成时自动构建并部署 WebUI 前端产物。本模板已预配置：
-
-```typescript
-// vite.config.ts
-napcatHmrPlugin({
-    webui: {
-        root: './src/webui',           // WebUI 项目根目录（用于执行构建命令的 cwd）
-        buildCommand: 'pnpm install && pnpm run build',  // 构建命令
-        distDir: './src/webui/dist',   // WebUI 构建产物目录
-        targetDir: 'webui',            // 部署到远程插件目录中的子目录名
-    },
-})
-```
-
-每次 `writeBundle` 时的完整流程：
+然后 `napcatHmrPlugin` 会自动：
 1. 连接调试服务（WebSocket）
 2. 获取远程插件目录路径
-3. 复制 `dist/` 主构建产物到远程
-4. 执行 WebUI `buildCommand`（如果配置了）
-5. 复制 WebUI 构建产物到远程插件目录的 `webui/` 子目录
-6. 调用 `reloadPlugin` 热重载插件
+3. 复制 `dist/` 到远程
+4. 复制 WebUI 产物到远程插件目录的 `webui/` 子目录
+5. 调用 `reloadPlugin` 热重载插件
+
+> **注意**：`pnpm run dev` 仅监听插件后端（`src/` 下非 webui 的文件）的变化。修改 WebUI 前端代码后，随便改动一下后端文件即可触发重新构建（每次后端构建时会自动构建并部署 WebUI）。
+>
+> 如果只开发 WebUI 前端，推荐使用 `pnpm run dev:webui` 启动前端开发服务器，可实时预览。
 
 如需自定义调试服务地址或 token：
 
@@ -229,20 +221,7 @@ napcatHmrPlugin({
     wsUrl: 'ws://192.168.1.100:8998',
     token: 'mySecret',
     webui: {
-        root: './src/webui',
-        buildCommand: 'pnpm install && pnpm run build',
         distDir: './src/webui/dist',
-        targetDir: 'webui',
-    },
-})
-```
-
-如果是纯 HTML 的 WebUI（无需构建），省略 `buildCommand` 即可：
-
-```typescript
-napcatHmrPlugin({
-    webui: {
-        distDir: './webui',
         targetDir: 'webui',
     },
 })

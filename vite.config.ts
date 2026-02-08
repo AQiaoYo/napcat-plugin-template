@@ -81,7 +81,7 @@ function copyAssetsPlugin() {
                     }
                 }
 
-                // 2. 生成精简的 package.json（只保留运行时必要字段）
+                // 3. 生成精简的 package.json（只保留运行时必要字段）
                 const pkgPath = resolve(__dirname, 'package.json');
                 if (fs.existsSync(pkgPath)) {
                     const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf-8'));
@@ -105,7 +105,7 @@ function copyAssetsPlugin() {
                     console.log('[copy-assets] (o\'v\'o) 已生成精简 package.json');
                 }
 
-                // 3. 复制 templates 目录（如果存在）
+                // 4. 复制 templates 目录（如果存在）
                 const templatesSrc = resolve(__dirname, 'templates');
                 if (fs.existsSync(templatesSrc)) {
                     copyDirRecursive(templatesSrc, resolve(distDir, 'templates'));
